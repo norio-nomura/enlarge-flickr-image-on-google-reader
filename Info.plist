@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Author</key>
+	<string>Norio Nomura</string>
+	<key>CFBundleDisplayName</key>
+	<string>Enlarge Flickr Image On Google Reader</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.github.norio-nomura.enlarge-flickr-image-on-google-reader</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>1</string>
+	<key>Chrome</key>
+	<dict/>
+	<key>Content</key>
+	<dict>
+		<key>Scripts</key>
+		<dict>
+			<key>Start</key>
+			<array>
+				<string>beforeLoad.js</string>
+			</array>
+		</dict>
+		<key>Whitelist</key>
+		<array>
+			<string>https://www.google.com/reader/view/</string>
+			<string>http://www.google.com/reader/view/</string>
+		</array>
+	</dict>
+	<key>Description</key>
+	<string>Enlarge Flickr's rss feed images on Google Reader</string>
+	<key>ExtensionInfoDictionaryVersion</key>
+	<string>1.0</string>
+	<key>Permissions</key>
+	<dict>
+		<key>Website Access</key>
+		<dict>
+			<key>Allowed Domains</key>
+			<array>
+				<string>www.google.com</string>
+			</array>
+			<key>Include Secure Pages</key>
+			<true/>
+			<key>Level</key>
+			<string>Some</string>
+		</dict>
+	</dict>
+	<key>Update Manifest URL</key>
+	<string>http://norio-nomura.github.com/enlarge-flickr-image-on-google-reader.safariextension/Manifest.plist</string>
+	<key>Website</key>
+	<string>http://github.com/norio-nomura/enlarge-flickr-image-on-google-reader.safariextension/</string>
+</dict>
+</plist>
