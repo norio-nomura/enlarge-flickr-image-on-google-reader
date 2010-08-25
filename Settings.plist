@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>DefaultValue</key>
+		<real>640</real>
+		<key>Key</key>
+		<string>imageWidth</string>
+		<key>Title</key>
+		<string>Image Width</string>
+		<key>Titles</key>
+		<array>
+			<string>500</string>
+			<string>640</string>
+			<string>1024</string>
+		</array>
+		<key>Type</key>
+		<string>PopUpButton</string>
+		<key>Values</key>
+		<array>
+			<real>500</real>
+			<real>640</real>
+			<real>1024</real>
+		</array>
+	</dict>
+</array>
+</plist>

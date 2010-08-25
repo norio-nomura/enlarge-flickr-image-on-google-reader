@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<!--
+
+The MIT License
+
+Copyright (c) 2010 Norio Nomura
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+-->
+
+<script type="text/javascript" charset="utf-8">
+
+const LARGEST_WIDTH = 1024;
+
+safari.application.addEventListener("message", handleMessageEvent, false);
+
+function handleMessageEvent(messageEvent) {
+    if(messageEvent.name === "Enlarge") {
+        var src = messageEvent.message;
+        var photo_id = src.replace(/^http:\/\/[^/]*\/[^/]*\/([^_]*)_.*/,"$1");
+        var api_url  = 'http://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=0a3505ba341af04668713d176dedddec&photo_id=' + photo_id;
+        var req = new XMLHttpRequest();
+        req.onreadystatechange = function(e) {
+            if (this.readyState == 4) {
+                if (this.status == 200 ) {
+                    var sizes = this.responseXML.getElementsByTagName('size');
+                    var newSrc = '';
+                    for (var i = 0; i < sizes.length; i++) {
+                        var media = sizes[i].getAttribute('media'); 
+                        if (media == "photo") {
+                            var size = sizes[i].getAttribute('width');
+                            if (safari.extension.settings.imageWidth >= size) {
+                               newSrc = sizes[i].getAttribute('source');
+                            }
+                        }
+                    }
+                    safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(src, newSrc);
+                }
+            }
+        };
+        req.open('GET', api_url, true );
+        req.send(null);
+    }
+}
+
+</script>
