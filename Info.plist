@@ -35,7 +35,7 @@
 		</array>
 	</dict>
 	<key>Description</key>
-	<string>Enlarge Flickr's rss feed images on Google Reader</string>
+	<string>Enlarge Flickr&apos;s rss feed images on Google Reader</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
@@ -54,8 +54,8 @@
 		</dict>
 	</dict>
 	<key>Update Manifest URL</key>
-	<string>http://norio-nomura.github.com/enlarge-flickr-image-on-google-reader.safariextension/Manifest.plist</string>
+	<string>http://norio-nomura.github.com/enlarge-flickr-image-on-google-reader/Manifest.plist</string>
 	<key>Website</key>
-	<string>http://github.com/norio-nomura/enlarge-flickr-image-on-google-reader.safariextension/</string>
+	<string>http://github.com/norio-nomura/enlarge-flickr-image-on-google-reader/</string>
 </dict>
 </plist>

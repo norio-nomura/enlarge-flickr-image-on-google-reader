@@ -30,9 +30,13 @@ THE SOFTWARE.
 /* IF YOU CLONE THIS PROJECT, CREATE YOUR API KEY FROM http://www.flickr.com/services/apps/create/apply/ */
 const flickr_api_key = '0a3505ba341af04668713d176dedddec';
 
-safari.application.addEventListener("message", handleMessageEvent, false);
+if (typeof(safari) != "undefined") {
+    safari.application.addEventListener("message", handleMessageEvent, false);
+} else if (typeof(chrome) != "undefined") {
+    chrome.extension.onRequest.addListener(handleMessageEvent);
+}
 
-function handleMessageEvent(messageEvent) {
+function handleMessageEvent(messageEvent, sender, sendResponse) {
     if(messageEvent.name === "Enlarge") {
         var src = messageEvent.message;
         var photo_id = src.replace(/^http:\/\/[^/]*\/[^/]*\/([^_]*)_.*/,"$1");
@@ -42,14 +46,19 @@ function handleMessageEvent(messageEvent) {
             if (this.readyState == 4 && this.status == 200) {
                 var sizes = this.responseXML.getElementsByTagName('size');
                 var newSrc = '';
+                var imageWidth = typeof(safari) != "undefined" ? safari.extension.settings.imageWidth : 640;
                 for (var i = 0; i < sizes.length; i++) {
                     if (sizes[i].getAttribute('media') == "photo") {
-                        if (safari.extension.settings.imageWidth >= sizes[i].getAttribute('width')) {
+                        if (imageWidth >= sizes[i].getAttribute('width')) {
                            newSrc = sizes[i].getAttribute('source');
                         }
                     }
                 }
-                safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(src, newSrc);
+                if (typeof(safari) != "undefined") {
+                    safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(src, newSrc);
+                } else if (typeof(chrome) != "undefined") {
+                    sendResponse({"name":src, "message":newSrc});
+                }
             }
         };
         req.open('GET', api_url, true);

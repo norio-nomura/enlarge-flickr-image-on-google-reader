@@ -1,0 +1,16 @@
+{
+    "name":"Enlarge Flickr Image On Google Reader",
+    "version":"1.2",
+    "description":"Enlarge Flickr's rss feed images on Google Reader",
+    "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChygUc5iG3ne3lqNO7OC06pDXF+qfxtNEHhcrZmdrngHAMgUjpnBOfw+Z+w4ylq3BytMZs7g2rVptJ37S90NSf1eLxTRm1tZQTHPHwO5NzHJOvMBipVOAVyo70wvQYEesoHqzDKupw63pj4tdNNj1o8/mM4yQSzh6OQjtBYjVlTwIDAQAB",
+    "background_page":"global.html",
+    "content_scripts":[
+        {
+            "matches":["https://www.google.com/reader/view/*","http://www.google.com/reader/view/*"],
+            "js":["beforeLoad.js"],
+            "run_at":"document_start"
+        }
+    ],
+    "permissions":["http://api.flickr.com/"],
+    "update_url":"http://norio-nomura.github.com/enlarge-flickr-image-on-google-reader/Manifest.xml"
+}

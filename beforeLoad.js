@@ -27,7 +27,9 @@ THE SOFTWARE.
 var largerImages = {};
 
 document.addEventListener("beforeload", handleBeforeLoadEvent, true);
-safari.self.addEventListener("message", replaceImgSrc, true);
+if (typeof(safari) != "undefined") {
+    safari.self.addEventListener("message", replaceImgSrc, true);
+}
 
 function handleBeforeLoadEvent(messageEvent) {
     var element = messageEvent.target;
@@ -38,7 +40,11 @@ function handleBeforeLoadEvent(messageEvent) {
             element.src = largerImages[element.src].newSrc;
         } else {
             largerImages[element.src] = {"element":element};
-            safari.self.tab.dispatchMessage("Enlarge", element.src);
+            if (typeof(safari) != "undefined") {
+                safari.self.tab.dispatchMessage("Enlarge", element.src);
+            } else if (typeof(chrome) != "undefined") {
+                chrome.extension.sendRequest({"name":"Enlarge", "message":element.src}, replaceImgSrc);
+            }
         }
     }
 }
