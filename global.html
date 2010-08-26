@@ -27,7 +27,8 @@ THE SOFTWARE.
 
 <script type="text/javascript" charset="utf-8">
 
-const LARGEST_WIDTH = 1024;
+/* IF YOU CLONE THIS PROJECT, CREATE YOUR API KEY FROM http://www.flickr.com/services/apps/create/apply/ */
+const flickr_api_key = '0a3505ba341af04668713d176dedddec';
 
 safari.application.addEventListener("message", handleMessageEvent, false);
 
@@ -35,27 +36,23 @@ function handleMessageEvent(messageEvent) {
     if(messageEvent.name === "Enlarge") {
         var src = messageEvent.message;
         var photo_id = src.replace(/^http:\/\/[^/]*\/[^/]*\/([^_]*)_.*/,"$1");
-        var api_url  = 'http://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=0a3505ba341af04668713d176dedddec&photo_id=' + photo_id;
+        var api_url  = 'http://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=' + flickr_api_key + '&photo_id=' + photo_id;
         var req = new XMLHttpRequest();
-        req.onreadystatechange = function(e) {
-            if (this.readyState == 4) {
-                if (this.status == 200 ) {
-                    var sizes = this.responseXML.getElementsByTagName('size');
-                    var newSrc = '';
-                    for (var i = 0; i < sizes.length; i++) {
-                        var media = sizes[i].getAttribute('media'); 
-                        if (media == "photo") {
-                            var size = sizes[i].getAttribute('width');
-                            if (safari.extension.settings.imageWidth >= size) {
-                               newSrc = sizes[i].getAttribute('source');
-                            }
+        req.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var sizes = this.responseXML.getElementsByTagName('size');
+                var newSrc = '';
+                for (var i = 0; i < sizes.length; i++) {
+                    if (sizes[i].getAttribute('media') == "photo") {
+                        if (safari.extension.settings.imageWidth >= sizes[i].getAttribute('width')) {
+                           newSrc = sizes[i].getAttribute('source');
                         }
                     }
-                    safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(src, newSrc);
                 }
+                safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(src, newSrc);
             }
         };
-        req.open('GET', api_url, true );
+        req.open('GET', api_url, true);
         req.send(null);
     }
 }

@@ -24,25 +24,28 @@ THE SOFTWARE.
 
 */
 
-document.addEventListener("beforeload", handleBeforeLoadEvent, true);
-
 var largerImages = {};
+
+document.addEventListener("beforeload", handleBeforeLoadEvent, true);
+safari.self.addEventListener("message", replaceImgSrc, true);
 
 function handleBeforeLoadEvent(messageEvent) {
     var element = messageEvent.target;
     if (element.nodeName === "IMG" && element.src.search(/http:\/\/.*.flickr\.com\/.*_m\.jpg$/i) != -1) {
         if (element.hasAttribute("height")) element.removeAttribute("height");
-        element.setAttribute("width","100%");
+        element.setAttribute("width", "100%");
         if (element.src in largerImages) {
-            element.src = largerImages[element.src];
+            element.src = largerImages[element.src].newSrc;
         } else {
-            safari.self.addEventListener("message", function(e){replaceImgSrc(element, e.message)}, true);
+            largerImages[element.src] = {"element":element};
             safari.self.tab.dispatchMessage("Enlarge", element.src);
         }
     }
 }
 
-function replaceImgSrc(element, newSrc) {
-    largerImages[element.src] = newSrc;
-    element.src = newSrc;
+function replaceImgSrc(event) {
+    var largerImage = largerImages[event.name];
+    largerImage.newSrc = event.message;
+    largerImage.element.src = event.message;
+    largerImage.element = null;
 }
