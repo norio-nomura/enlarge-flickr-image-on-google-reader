@@ -11,9 +11,9 @@
 		<string>Image Width</string>
 		<key>Titles</key>
 		<array>
-			<string>500</string>
-			<string>640</string>
-			<string>1024</string>
+			<string>500px</string>
+			<string>640px</string>
+			<string>1024px</string>
 		</array>
 		<key>Type</key>
 		<string>PopUpButton</string>
@@ -23,6 +23,16 @@
 			<real>640</real>
 			<real>1024</real>
 		</array>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<false/>
+		<key>Key</key>
+		<string>hd_default</string>
+		<key>Title</key>
+		<string>Default video quality is HD</string>
+		<key>Type</key>
+		<string>CheckBox</string>
 	</dict>
 </array>
 </plist>

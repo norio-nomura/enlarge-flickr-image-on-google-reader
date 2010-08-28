@@ -24,11 +24,11 @@ THE SOFTWARE.
 
 */
 
-var largerImages = {};
+var largerSrcs = {};
 
 document.addEventListener("beforeload", handleBeforeLoadEvent, true);
 if (typeof(safari) != "undefined") {
-    safari.self.addEventListener("message", replaceImgSrc, true);
+    safari.self.addEventListener("message", getLargerSrc, true);
 }
 
 function handleBeforeLoadEvent(messageEvent) {
@@ -36,22 +36,40 @@ function handleBeforeLoadEvent(messageEvent) {
     if (element.nodeName === "IMG" && element.src.search(/http:\/\/.*.flickr\.com\/.*_m\.jpg$/i) != -1) {
         if (element.hasAttribute("height")) element.removeAttribute("height");
         element.setAttribute("width", "100%");
-        if (element.src in largerImages) {
-            element.src = largerImages[element.src].newSrc;
+        if (element.src in largerSrcs) {
+            var largerSrc = largerSrcs[element.src];
+            replaceElementSrc(element, largerSrc);
         } else {
-            largerImages[element.src] = {"element":element};
+            largerSrcs[element.src] = {"element":element};
             if (typeof(safari) != "undefined") {
                 safari.self.tab.dispatchMessage("Enlarge", element.src);
             } else if (typeof(chrome) != "undefined") {
-                chrome.extension.sendRequest({"name":"Enlarge", "message":element.src}, replaceImgSrc);
+                chrome.extension.sendRequest({"name":"Enlarge", "message":element.src}, getLargerSrc);
             }
         }
     }
 }
 
-function replaceImgSrc(event) {
-    var largerImage = largerImages[event.name];
-    largerImage.newSrc = event.message;
-    largerImage.element.src = event.message;
-    largerImage.element = null;
+function getLargerSrc(event) {
+    var element = largerSrcs[event.name].element;
+    var largerSrc = event.message;
+    largerSrcs[event.name] = largerSrc;
+    replaceElementSrc(element, largerSrc);
+}
+
+function replaceElementSrc(element, largerSrc) {
+    var re = /^(.*\/stewart\.swf\?v=71377)&(.*)$/;
+    var srcs = re.exec(largerSrc.newSrc);
+    if (srcs != null) {
+        var embed = document.createElement("embed");
+        embed.type = "application/x-shockwave-flash";
+        embed.src = srcs[1] + '&flickr_show_info_box=true&hd_default=' + largerSrc.hd_default;
+        embed.setAttribute("flashvars", srcs[2]);
+        embed.setAttribute("height", largerSrc.newHeight);
+        embed.setAttribute("width", largerSrc.newWidth);
+        embed.setAttribute("allowfullscreen", "true");
+        element.parentNode.parentNode.replaceChild(embed, element.parentNode);
+    } else {
+        element.src = largerSrc.newSrc;
+    }
 }

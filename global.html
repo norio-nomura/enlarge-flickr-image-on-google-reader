@@ -46,18 +46,34 @@ function handleMessageEvent(messageEvent, sender, sendResponse) {
             if (this.readyState == 4 && this.status == 200) {
                 var sizes = this.responseXML.getElementsByTagName('size');
                 var newSrc = '';
+                var newWidth;
+                var newHeight;
                 var imageWidth = typeof(safari) != "undefined" ? safari.extension.settings.imageWidth : 640;
+                var hd_default = typeof(safari) != "undefined" ? safari.extension.settings.hd_default : "false";
                 for (var i = 0; i < sizes.length; i++) {
-                    if (sizes[i].getAttribute('media') == "photo") {
-                        if (imageWidth >= sizes[i].getAttribute('width')) {
-                           newSrc = sizes[i].getAttribute('source');
+                    var size = sizes[i];
+                    var media = size.getAttribute('media');
+                    var width = size.getAttribute('width');
+                    if (media == "photo") {
+                        if (imageWidth >= width) {
+                            newSrc = size.getAttribute('source');
+                            newWidth = width;
+                            newHeight = size.getAttribute('height');
                         }
-                    }
+                    } else if (media == "video" && size.getAttribute('label') == "Video Player") {
+                        var videoSrc = size.getAttribute('source');
+                        if (videoSrc.search(/\/stewart\.swf\?v=71377/) != -1) {
+                            newSrc = videoSrc;
+                            newWidth = width;
+                            newHeight = size.getAttribute('height');
+                            break;
+                        }
+                    } 
                 }
                 if (typeof(safari) != "undefined") {
-                    safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(src, newSrc);
+                    safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(src, {"newSrc":newSrc, "newHeight":newHeight, "newWidth":newWidth, "hd_default":hd_default});
                 } else if (typeof(chrome) != "undefined") {
-                    sendResponse({"name":src, "message":newSrc});
+                    sendResponse({"name":src, "message":{"newSrc":newSrc, "newHeight":newHeight, "newWidth":newWidth, "hd_default":hd_default}});
                 }
             }
         };
