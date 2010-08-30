@@ -33,7 +33,7 @@ if (typeof(safari) != "undefined") {
 
 function handleBeforeLoadEvent(messageEvent) {
     var element = messageEvent.target;
-    if (element.nodeName === "IMG" && element.src.search(/http:\/\/.*.flickr\.com\/.*_m\.jpg$/i) != -1) {
+    if (element.nodeName === "IMG" && element.src.search(/http:\/\/farm.*\.static\.flickr\.com\/.*\.jpg$/i) != -1) {
         if (element.hasAttribute("height")) element.removeAttribute("height");
         element.setAttribute("width", "100%");
         if (element.src in largerSrcs) {
