@@ -48,7 +48,7 @@ function handleMessageEvent(messageEvent, sender, sendResponse) {
                 var newSrc = '';
                 var newWidth;
                 var newHeight;
-                var imageWidth = typeof(safari) != "undefined" ? safari.extension.settings.imageWidth : 640;
+                var imageWidth = typeof(safari) != "undefined" ? safari.extension.settings.imageWidth : 1024;
                 var hd_default = typeof(safari) != "undefined" ? safari.extension.settings.hd_default : "false";
                 for (var i = 0; i < sizes.length; i++) {
                     var size = sizes[i];
