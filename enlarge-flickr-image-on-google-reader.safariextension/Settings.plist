@@ -8,7 +8,7 @@
 		<key>Key</key>
 		<string>imageWidth</string>
 		<key>Title</key>
-		<string>Image Width</string>
+		<string>Biggest image width is</string>
 		<key>Titles</key>
 		<array>
 			<string>500px</string>
@@ -26,13 +26,65 @@
 	</dict>
 	<dict>
 		<key>DefaultValue</key>
+		<string>flash</string>
+		<key>Key</key>
+		<string>videoPlayer</string>
+		<key>Title</key>
+		<string>Video Player is</string>
+		<key>Titles</key>
+		<array>
+			<string>Off</string>
+			<string>HTML5</string>
+			<string>Flash</string>
+		</array>
+		<key>Type</key>
+		<string>PopUpButton</string>
+		<key>Values</key>
+		<array>
+			<string>off</string>
+			<string>html5</string>
+			<string>flash</string>
+		</array>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
+		<real>640</real>
+		<key>Key</key>
+		<string>videoWidth</string>
+		<key>Title</key>
+		<string>Smallest HTML5 video width is</string>
+		<key>Titles</key>
+		<array>
+			<string>640px</string>
+			<string>1280px</string>
+		</array>
+		<key>Type</key>
+		<string>PopUpButton</string>
+		<key>Values</key>
+		<array>
+			<real>640</real>
+			<real>1280</real>
+		</array>
+	</dict>
+	<dict>
+		<key>DefaultValue</key>
 		<false/>
 		<key>Key</key>
 		<string>hd_default</string>
 		<key>Title</key>
-		<string>Default video quality is HD</string>
+		<string>Default Flash video quality is</string>
+		<key>Titles</key>
+		<array>
+			<string>SD</string>
+			<string>HD</string>
+		</array>
 		<key>Type</key>
-		<string>CheckBox</string>
+		<string>PopUpButton</string>
+		<key>Values</key>
+		<array>
+			<false/>
+			<true/>
+		</array>
 	</dict>
 </array>
 </plist>

@@ -11,9 +11,9 @@
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.7</string>
+	<string>1.8</string>
 	<key>CFBundleVersion</key>
-	<string>1.7</string>
+	<string>1.8</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -35,7 +35,7 @@
 		</array>
 	</dict>
 	<key>Description</key>
-	<string>Enlarge Flickr&apos;s rss feed images on Google Reader</string>
+	<string>Enlarge Flickr's rss feed images on Google Reader</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
@@ -56,6 +56,6 @@
 	<key>Update Manifest URL</key>
 	<string>http://norio-nomura.github.com/enlarge-flickr-image-on-google-reader/Manifest.plist</string>
 	<key>Website</key>
-	<string>http://github.com/norio-nomura/enlarge-flickr-image-on-google-reader/</string>
+	<string>http://norio-nomura.github.com/enlarge-flickr-image-on-google-reader/</string>
 </dict>
 </plist>

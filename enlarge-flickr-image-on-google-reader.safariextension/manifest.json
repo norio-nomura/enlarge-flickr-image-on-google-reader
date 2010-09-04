@@ -1,6 +1,6 @@
 {
     "name":"Enlarge Flickr Image On Google Reader",
-    "version":"1.7",
+    "version":"1.8",
     "description":"Enlarge Flickr's rss feed images on Google Reader",
     "icons":{"128":"icon.png"},
     "background_page":"global.html",
@@ -11,5 +11,6 @@
             "run_at":"document_start"
         }
     ],
+    "options_page": "options.html",
     "permissions":["http://api.flickr.com/"]
 }

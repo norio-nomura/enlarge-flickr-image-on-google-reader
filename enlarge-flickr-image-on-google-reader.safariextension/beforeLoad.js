@@ -26,15 +26,47 @@ THE SOFTWARE.
 
 var largerSrcs = {};
 
-document.addEventListener("beforeload", handleBeforeLoadEvent, true);
-if (typeof(safari) != "undefined") {
-    safari.self.addEventListener("message", getLargerSrc, true);
+function replaceElementSrc(element, largerSrc) {
+    if (largerSrc.isVideo) {
+        var re = /^(.*\/stewart\.swf\?v=71377)&(.*)$/;
+        var srcs = re.exec(largerSrc.newSrc);
+        if (srcs != null) {
+            var embed = document.createElement("embed");
+            embed.type = "application/x-shockwave-flash";
+            embed.src = srcs[1] + '&flickr_show_info_box=true&hd_default=' + largerSrc.hd_default;
+            embed.setAttribute("flashvars", srcs[2]);
+            embed.setAttribute("height", largerSrc.newHeight);
+            embed.setAttribute("width", largerSrc.newWidth);
+            embed.setAttribute("allowfullscreen", "true");
+            element.parentNode.parentNode.replaceChild(embed, element.parentNode);
+        } else {
+            var video = document.createElement("video");
+            video.src = largerSrc.newSrc;
+            video.setAttribute("poster", element.src);
+            video.setAttribute("width", "100%");
+            video.setAttribute("preload");
+            video.setAttribute("autobuffer");
+            video.setAttribute("controls");
+            element.parentNode.parentNode.replaceChild(video, element.parentNode);
+        }
+    } else {
+        element.src = largerSrc.newSrc;
+    }
+}
+
+function getLargerSrc(event) {
+    var element = largerSrcs[event.name].element;
+    var largerSrc = event.message;
+    largerSrcs[event.name] = largerSrc;
+    replaceElementSrc(element, largerSrc);
 }
 
 function handleBeforeLoadEvent(messageEvent) {
     var element = messageEvent.target;
-    if (element.nodeName === "IMG" && element.src.search(/http:\/\/farm.*\.static\.flickr\.com\/.*\.jpg$/i) != -1) {
-        if (element.hasAttribute("height")) element.removeAttribute("height");
+    if (element.nodeName == "IMG" && element.src.search(/http:\/\/farm.*\.static\.flickr\.com\/.*\.jpg$/i) != -1) {
+        if (element.hasAttribute("height")) {
+            element.removeAttribute("height");
+        }
         element.setAttribute("width", "100%");
         if (element.src in largerSrcs) {
             var largerSrc = largerSrcs[element.src];
@@ -50,26 +82,7 @@ function handleBeforeLoadEvent(messageEvent) {
     }
 }
 
-function getLargerSrc(event) {
-    var element = largerSrcs[event.name].element;
-    var largerSrc = event.message;
-    largerSrcs[event.name] = largerSrc;
-    replaceElementSrc(element, largerSrc);
-}
-
-function replaceElementSrc(element, largerSrc) {
-    var re = /^(.*\/stewart\.swf\?v=71377)&(.*)$/;
-    var srcs = re.exec(largerSrc.newSrc);
-    if (srcs != null) {
-        var embed = document.createElement("embed");
-        embed.type = "application/x-shockwave-flash";
-        embed.src = srcs[1] + '&flickr_show_info_box=true&hd_default=' + largerSrc.hd_default;
-        embed.setAttribute("flashvars", srcs[2]);
-        embed.setAttribute("height", largerSrc.newHeight);
-        embed.setAttribute("width", largerSrc.newWidth);
-        embed.setAttribute("allowfullscreen", "true");
-        element.parentNode.parentNode.replaceChild(embed, element.parentNode);
-    } else {
-        element.src = largerSrc.newSrc;
-    }
+document.addEventListener("beforeload", handleBeforeLoadEvent, true);
+if (typeof(safari) != "undefined") {
+    safari.self.addEventListener("message", getLargerSrc, true);
 }
