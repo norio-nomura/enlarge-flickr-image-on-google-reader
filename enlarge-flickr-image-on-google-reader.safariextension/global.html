@@ -3,7 +3,7 @@
 
 The MIT License
 
-Copyright (c) 2010 Norio Nomura
+Copyright (c) 2011 Norio Nomura
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,83 +26,84 @@ THE SOFTWARE.
 -->
 <html>
 <head>
-<title>Enlarge Flickr Image On Google Reader</title>
-<script src="options.js"></script>
-<script type="text/javascript">
+  <title>Enlarge Flickr Image On Google Reader</title>
+  <script src="options.js"></script>
+  <script type="text/javascript">
 
-/* IF YOU CLONE THIS PROJECT, CREATE YOUR API KEY FROM http://www.flickr.com/services/apps/create/apply/ */
-const flickr_api_key = '0a3505ba341af04668713d176dedddec';
+    /* IF YOU CLONE THIS PROJECT, CREATE YOUR API KEY FROM http://www.flickr.com/services/apps/create/apply/ */
+    const flickr_api_key = '0a3505ba341af04668713d176dedddec';
 
-function handleMessageEvent(messageEvent, sender, sendResponse) {
-    if(messageEvent.name == "Enlarge") {
-        var src = messageEvent.message;
-        var photo_id = src.replace(/^http:\/\/[^\/]*\/[^\/]*\/([^_]*)_.*/,"$1");
-        var api_url  = 'http://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=' + flickr_api_key + '&photo_id=' + photo_id;
-        var req = new XMLHttpRequest();
+    function handleMessageEvent(messageEvent, sender, sendResponse) {
+      if (messageEvent.name == "Enlarge") {
+        var src = messageEvent.message,
+            re = /^http:\/\/[^\/]*\/.*&photo_id=([^_]*)$/.exec(src) || /^http:\/\/[^\/]*\/[^\/]*\/([^_]*)_.*/.exec(src),
+            photo_id = re ? re[1] : null,
+            api_url = 'http://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=' + flickr_api_key + '&photo_id=' + photo_id,
+            req = new XMLHttpRequest();
         req.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                var sizes = this.responseXML.getElementsByTagName('size');
-                var newSrc = '';
-                var newImageWidth;
-                var newVideoWidth = 4096;
-                var newHeight;
-                var settings = typeof(safari) != "undefined" ? safari.extension.settings : localStorage;
-                var imageWidth = settings.imageWidth != null ? settings.imageWidth : options.imageWidth;
-                var videoPlayer = settings.videoPlayer != null ? settings.videoPlayer : options.videoPlayer;
-                var videoWidth = settings.videoWidth != null ? settings.videoWidth : options.videoWidth;
-                var hd_default = settings.hd_default != null ? settings.hd_default : options.hd_default;
-                var isVideo = false;
-                for (var i = 0; i < sizes.length; i++) {
-                    var size = sizes[i];
-                    var media = size.getAttribute('media');
-                    var width = Number(size.getAttribute('width'));
-                    if (!isVideo && media == "photo") {
-                        if (imageWidth >= width) {
-                            newSrc = size.getAttribute('source');
-                            newImageWidth = width;
-                            newHeight = size.getAttribute('height');
-                        }
-                    } else if (media == "video") {
-                        var label = size.getAttribute('label');
-                        if (videoPlayer == "html5" && label.search(/MP4$/) != -1) {
-                            if (videoWidth <= width && newVideoWidth >= width) {
-                                newSrc = size.getAttribute('source');
-                                newVideoWidth = width;
-                                newHeight = size.getAttribute('height');
-                                isVideo = true;
-                            }
-                        } else if (videoPlayer == "flash" && label == "Video Player") {
-                            var videoSrc = size.getAttribute('source');
-                            if (videoSrc.search(/\/stewart\.swf\?v=71377/) != -1) {
-                                newSrc = videoSrc;
-                                newVideoWidth = width;
-                                newHeight = size.getAttribute('height');
-                                isVideo = true;
-                                break;
-                            }
-                        }
-                    } 
+          if (this.readyState == 4 && this.status == 200) {
+            var sizes = this.responseXML.getElementsByTagName('size');
+            var newSrc = '';
+            var newImageWidth;
+            var newVideoWidth = 4096;
+            var newHeight;
+            var settings = typeof(safari) != "undefined" ? safari.extension.settings : localStorage;
+            var imageWidth = settings.imageWidth != null ? settings.imageWidth : options.imageWidth;
+            var videoPlayer = settings.videoPlayer != null ? settings.videoPlayer : options.videoPlayer;
+            var videoWidth = settings.videoWidth != null ? settings.videoWidth : options.videoWidth;
+            var hd_default = settings.hd_default != null ? settings.hd_default : options.hd_default;
+            var isVideo = false;
+            for (var i = 0; i < sizes.length; i++) {
+              var size = sizes[i];
+              var media = size.getAttribute('media');
+              var width = Number(size.getAttribute('width'));
+              if (!isVideo && media == "photo") {
+                if (imageWidth >= width) {
+                  newSrc = size.getAttribute('source');
+                  newImageWidth = width;
+                  newHeight = size.getAttribute('height');
                 }
-                var newWidth = isVideo ? newVideoWidth.toString() : newImageWidth.toString();
-                if (typeof(safari) != "undefined") {
-                    safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(src, {"newSrc":newSrc, "newHeight":newHeight, "newWidth":newWidth, "isVideo":isVideo, "hd_default":hd_default});
-                } else if (typeof(chrome) != "undefined") {
-                    sendResponse({"name":src, "message":{"newSrc":newSrc, "newHeight":newHeight, "newWidth":newWidth, "isVideo":isVideo, "hd_default":hd_default}});
+              } else if (media == "video") {
+                var label = size.getAttribute('label');
+                if (videoPlayer == "html5" && label.search(/MP4$/) != -1) {
+                  if (videoWidth <= width && newVideoWidth >= width) {
+                    newSrc = size.getAttribute('source');
+                    newVideoWidth = width;
+                    newHeight = size.getAttribute('height');
+                    isVideo = true;
+                  }
+                } else if (videoPlayer == "flash" && label == "Video Player") {
+                  var videoSrc = size.getAttribute('source');
+                  if (videoSrc.search(/\/stewart\.swf\?v=71377/) != -1) {
+                    newSrc = videoSrc;
+                    newVideoWidth = width;
+                    newHeight = size.getAttribute('height');
+                    isVideo = true;
+                    break;
+                  }
                 }
+              }
             }
+            var newWidth = isVideo ? newVideoWidth.toString() : newImageWidth.toString();
+            if (typeof(safari) != "undefined") {
+              safari.application.activeBrowserWindow.activeTab.page.dispatchMessage(src, {"newSrc":newSrc, "newHeight":newHeight, "newWidth":newWidth, "isVideo":isVideo, "hd_default":hd_default});
+            } else if (typeof(chrome) != "undefined") {
+              sendResponse({"name":src, "message":{"newSrc":newSrc, "newHeight":newHeight, "newWidth":newWidth, "isVideo":isVideo, "hd_default":hd_default}});
+            }
+          }
         };
         req.open('GET', api_url, true);
         req.send(null);
+      }
     }
-}
 
-if (typeof(safari) != "undefined") {
-    safari.application.addEventListener("message", handleMessageEvent, false);
-} else if (typeof(chrome) != "undefined") {
-    chrome.extension.onRequest.addListener(handleMessageEvent);
-}
+    if (typeof(safari) != "undefined") {
+      safari.application.addEventListener("message", handleMessageEvent, false);
+    } else if (typeof(chrome) != "undefined") {
+      chrome.extension.onRequest.addListener(handleMessageEvent);
+    }
 
-</script>
+  </script>
 </head>
 <body></body>
 </html>
