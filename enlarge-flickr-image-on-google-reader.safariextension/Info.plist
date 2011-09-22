@@ -4,16 +4,18 @@
 <dict>
 	<key>Author</key>
 	<string>Norio Nomura</string>
+	<key>Builder Version</key>
+	<string>7534.51.21</string>
 	<key>CFBundleDisplayName</key>
-	<string>Enlarge Flickr Image On Google Reader</string>
+	<string>Enlarge Flickr™ Image On Google Reader™</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.github.norio-nomura.enlarge-flickr-image-on-google-reader</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.9</string>
+	<string>1.10</string>
 	<key>CFBundleVersion</key>
-	<string>1.9</string>
+	<string>1.10</string>
 	<key>Chrome</key>
 	<dict>
 		<key>Global Page</key>
@@ -35,7 +37,7 @@
 		</array>
 	</dict>
 	<key>Description</key>
-	<string>Enlarge Flickr's rss feed images on Google Reader</string>
+	<string>Enlarge Flickr™'s rss feed images on Google Reader™</string>
 	<key>ExtensionInfoDictionaryVersion</key>
 	<string>1.0</string>
 	<key>Permissions</key>
