@@ -1,6 +1,6 @@
 var options = {
     "imageWidth":1024,
-    "videoPlayer":"flash",
+    "videoPlayer":"html5",
     "videoWidth":640,
     "hd_default":false
 };
