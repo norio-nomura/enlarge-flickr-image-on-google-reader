@@ -65,7 +65,7 @@ if (window.top === window) {
 
   function handleBeforeLoadEvent(messageEvent) {
     var element = messageEvent.target;
-    if ((element.nodeName == "IMG" && messageEvent.url.search(/http:\/\/farm.*\.static\.flickr\.com\/.*\.jpg$/i) != -1) ||
+    if ((element.nodeName == "IMG" && messageEvent.url.search(/http:\/\/farm.*\.static\.?flickr\.com\/.*\.jpg$/i) != -1) ||
         ((element.nodeName == "OBJECT" || element.nodeName == "EMBED") && messageEvent.url.search(/http:\/\/www\.flickr\.com\/apps\/video\/stewart\.swf\?.*$/i) != -1)) {
       if (messageEvent.url in largerSrcs) {
         var largerSrc = largerSrcs[messageEvent.url];
